@@ -2,7 +2,7 @@ package com.chenxi.community.dto;
 
 /**
  * @Author: Mr.Chen
- * @Description:
+ * @Description: 使用Github登录的用户对象,包含name，id，bio描述
  * @Date:Created in 14:55 2020/3/3
  */
 public class GithubUser {
