@@ -1,0 +1,14 @@
+body{
+    background-color: #efefef;
+}
+
+.main{
+    margin:30px;
+    background-color: white;
+}
+
+.btn-position{
+    float: right;
+    margin-bottom: 15px;
+    width:90px;
+}
