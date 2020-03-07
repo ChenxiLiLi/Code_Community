@@ -25,7 +25,7 @@ public class IndexController {
         //通过请求对象获取cookie
         Cookie[] cookies = request.getCookies();
         //对cookie判空
-        if(cookies.length == 0){
+        if(cookies == null){
             System.out.println("不存在cookie");
         }else{
             //查找自定义的cookie-别名token

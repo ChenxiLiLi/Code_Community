@@ -47,7 +47,7 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        if(githubUser != null){
+        if(githubUser != null && githubUser.getId() != null){
             //获取User
             User user = new User();
             //设置User的属性
@@ -60,10 +60,9 @@ public class AuthorizeController {
             userMapper.insertUser(user);
             //将自己的cookie写入数据库，用来辨别用户的身份
             response.addCookie(new Cookie("token", token));
-            return "redirect:/";
         }else{
             //不存在用户，返回重新登录
-            return "redirect:/";
         }
+        return "redirect:/";
     }
 }
