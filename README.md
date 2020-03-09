@@ -7,6 +7,7 @@
 [Github OAuth](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app)  
 [Spring Boot文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/)  
 [MyBatis-Spring-Boot-Starter](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
+[Lombok](https://projectlombok.org/setup/maven)
 
 ### 使用到的技术栈
 SpringBoot  

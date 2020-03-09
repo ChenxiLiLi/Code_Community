@@ -1,14 +1,15 @@
-package com.chenxi.community.model;
+package com.chenxi.community.dto;
 
+import com.chenxi.community.model.User;
 import lombok.Data;
 
 /**
  * @Author: Mr.Chen
- * @Description:
+ * @Description: 添加User，用来关联User与Question
  * @Date:Created in 19:28 2020/3/7
  */
 @Data
-public class Question {
+public class QuestionDTO {
     private Integer id;
     private String title;
     private String description;
@@ -19,4 +20,5 @@ public class Question {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
+    private User user;
 }
