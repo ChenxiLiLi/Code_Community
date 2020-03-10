@@ -1,8 +1,6 @@
 package com.chenxi.community.service;
 
-import com.chenxi.community.dto.QuestionDTO;
-
-import java.util.List;
+import com.chenxi.community.dto.PaginationDTO;
 
 /**
  * @Author: Mr.Chen
@@ -10,5 +8,10 @@ import java.util.List;
  * @Date:Created in 15:04 2020/3/9
  */
 public interface QuestionService {
-    List<QuestionDTO> getQuestionList();
+    /**
+     * @param page 当前页码
+     * @param pageSize 总页数
+     * @return 元素的集合
+     */
+    PaginationDTO getPaginationDTOList(Integer page, Integer pageSize);
 }

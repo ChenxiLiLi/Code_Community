@@ -24,3 +24,6 @@ body {
     color: #999;
 }
 
+.pull-right {
+    float: right!important;
+}
