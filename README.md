@@ -1,4 +1,4 @@
-## 问答社区
+## 码农社区
 
 ### 资料
 [Spring 文档](https://spring.io.guides)  
@@ -6,7 +6,7 @@
 [Bootstrap](https://v3.bootcss.com/)  
 [Github OAuth](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app)  
 [Spring Boot文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/)  
-[MyBatis-Spring-Boot-Starter](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
+[MyBatis-Spring-Boot-Starter](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)  
 [Lombok](https://projectlombok.org/setup/maven)
 
 ### 使用到的技术栈
