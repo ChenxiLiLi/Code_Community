@@ -55,4 +55,12 @@ public interface QuestionMapper {
      */
     @Select("SELECT COUNT(1) FROM QUESTION WHERE CREATOR = #{accountId}")
     Integer userCount(@Param(value = "accountId") String accountId);
+
+    /**
+     * 通过id查询Question对象
+     * @param id Question的唯一标识
+     * @return Question对象
+     */
+    @Select("SELECT * FROM QUESTION WHERE id = #{id}")
+    Question getQuestionById(@Param(value = "id") Integer id);
 }

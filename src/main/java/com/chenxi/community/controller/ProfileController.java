@@ -27,7 +27,7 @@ public class ProfileController {
     public String profile(@PathVariable(name = "action") String action,
                           HttpServletRequest request,
                           @RequestParam(name = "page", defaultValue = "1") Integer page,
-                          @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize,
+                          @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
                           Model model) {
         //判断用户是否登录，没有则返回首页
         User user = (User)request.getSession().getAttribute("user");
