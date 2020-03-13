@@ -16,10 +16,10 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span class="glyphicon glyphicon-eye-open" aria-hidden="true"> 发现</span></h3>
             <hr />
-            <div class="media" th:each="question : ${paginations.questions}">
+            <div class="media" th:each="question : ${pagination1.questions}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}" alt="用户头像" width="64px" height="64px">
+                        <img class="media-object img-rounded" th:src="${question.user.getAvatarUrl()}" alt="用户头像"/>
                     </a>
                 </div>
                 <div class="media-body">
@@ -35,26 +35,26 @@
             <!-- 处理分页 -->
             <nav aria-label="Page navigation">
                 <ul class="pagination pull-right">
-                    <li th:if="${paginations.showFirstPage}">
+                    <li th:if="${pagination1.showFirstPage}">
                         <a th:href="@{/(page=1)}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
-                    <li th:if="${paginations.showPrevious}">
-                        <a th:href="@{/(page=${paginations.page}-1)}" aria-label="Previous">
+                    <li th:if="${pagination1.showPrevious}">
+                        <a th:href="@{/(page=${pagination1.page}-1)}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
-                    <li th:each="page : ${paginations.pages}" th:class="${paginations.page == page} ? 'active' : ''">
+                    <li th:each="page : ${pagination1.pages}" th:class="${pagination1.page == page} ? 'active' : ''">
                         <a th:href="@{/(page=${page})}" th:text="${page}"></a>
                     </li>
-                    <li th:if="${paginations.showNext}">
-                        <a th:href="@{/(page=${paginations.page}+1)}" aria-label="Next">
+                    <li th:if="${pagination1.showNext}">
+                        <a th:href="@{/(page=${pagination1.page}+1)}" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
-                    <li th:if="${paginations.showEndPage}">
-                        <a th:href="@{/(page=${paginations.totalPage})}" aria-label="Next">
+                    <li th:if="${pagination1.showEndPage}">
+                        <a th:href="@{/(page=${pagination1.totalPage})}" aria-label="Next">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>

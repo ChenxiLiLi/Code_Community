@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * @Author: Mr.Chen
- * @Description:
+ * @Description: Github登录，提供访问令牌对象
  * @Date:Created in 21:47 2020/3/2
  */
 @Component
@@ -21,16 +21,16 @@ public class GithubProvider {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
         Request request = new Request.Builder()
-                .url("https://github.com/login/oauth/access_token?client_id=" + accessTokenDTO.getClient_id() +"&client_secret=" + accessTokenDTO.getClient_secret() + "&code=" + accessTokenDTO.getCode() + "&redirect_uri=" + accessTokenDTO.getRedirect_uri() + "&state=" + accessTokenDTO.getState())
+                .url("https://github.com/login/oauth/access_token?client_id=" + accessTokenDTO.getClientId() +"&client_secret=" + accessTokenDTO.getClientSecret() + "&code=" + accessTokenDTO.getCode() + "&redirect_uri=" + accessTokenDTO.getRedirectUri() + "&state=" + accessTokenDTO.getState())
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
+            //assert response.body() != null;
             String string = response.body().string();
             return string.split("&")[0].split("=")[1];
-        } catch (Exception e) {
-            //e.printStackTrace();
+        } catch (Exception ignored) {
+            return null;
         }
-        return null;
     }
 
     public GithubUser getUser(String accessToken){
@@ -41,11 +41,11 @@ public class GithubProvider {
             .build();
         try {
             Response response = client.newCall(request).execute();
+            //assert response.body() != null;
             String string = response.body().string();
             return JSON.parseObject(string, GithubUser.class);
-        } catch(IOException e){
-            //e.printStackTrace();
+        } catch(IOException ignored){
+            return null;
         }
-        return null;
     }
 }

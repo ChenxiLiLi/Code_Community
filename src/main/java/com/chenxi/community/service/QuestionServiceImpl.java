@@ -27,19 +27,26 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionMapper questionMapper;
 
     @Override
-    public PaginationDTO getPaginationDTOList(Integer page, Integer pageSize) {
-
+    public PaginationDTO getPaginationDTOList(String accountId, Integer page, Integer pageSize) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        //获取总Question数
-        Integer totalCount = questionMapper.count();
-        //获取Limit左侧的数
-        Integer offset = paginationDTO.setPagination(totalCount, page, pageSize);
-        //查询需要展示的Question
-        List<Question> questions = questionMapper.list(offset, pageSize);
+        Integer totalCount;         //问题条数
+        Integer offset;             //limit查询限制条件
+        List<Question> questions;   //Question集合
+        if ("0".equals(accountId)) {
+            //查询全部问题
+            totalCount = questionMapper.count();
+            offset = paginationDTO.getPagination(totalCount, page, pageSize);
+            questions = questionMapper.list(offset, pageSize);
+        } else {
+            //查询当前用户发布的问题
+            totalCount = questionMapper.userCount(accountId);
+            offset = paginationDTO.getPagination(totalCount, page, pageSize);
+            questions = questionMapper.userList(accountId, offset, pageSize);
+        }
         //QuestionDTO封装Question和User
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
-            User user = userMapper.findById(question.getCreator());
+            User user = userMapper.findByAccountId(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -48,4 +55,5 @@ public class QuestionServiceImpl implements QuestionService {
         paginationDTO.setQuestions(questionDTOList);
         return paginationDTO;
     }
+
 }

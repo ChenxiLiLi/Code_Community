@@ -27,3 +27,11 @@ body {
 .pull-right {
     float: right!important;
 }
+
+.profile .section {
+    margin-top: 20px;
+}
+
+.badge {
+    background-color: red;
+}

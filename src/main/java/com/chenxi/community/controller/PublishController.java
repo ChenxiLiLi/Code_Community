@@ -46,15 +46,15 @@ public class PublishController {
             return "publish";
         }
         //判断输入框的情况
-        if(title == null || title.equals("")){
+        if(title == null || "".equals(title)){
             model.addAttribute("error", "标题不能为空");
             return "publish";
         }
-        if(description == null || description.equals("")){
+        if(description == null || "".equals(description)){
             model.addAttribute("error", "问题描述不能为空");
             return "publish";
         }
-        if(tag == null || tag.equals("")){
+        if(tag == null || "".equals(tag)){
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
@@ -68,7 +68,7 @@ public class PublishController {
         question.setTag(tag);
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
-        question.setCreator(user.getId());
+        question.setCreator(user.getAccountId());
         questionMapper.create(question);
         return "redirect:/";
     }

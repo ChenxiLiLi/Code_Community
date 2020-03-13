@@ -9,9 +9,11 @@ import com.chenxi.community.dto.PaginationDTO;
  */
 public interface QuestionService {
     /**
+     * 该方法用来获取展示到前端的页面元素
+     * @param accountId Github用户的唯一标识
      * @param page 当前页码
      * @param pageSize 总页数
-     * @return 元素的集合
+     * @return 页面元素的集合
      */
-    PaginationDTO getPaginationDTOList(Integer page, Integer pageSize);
+    PaginationDTO getPaginationDTOList(String accountId, Integer page, Integer pageSize);
 }

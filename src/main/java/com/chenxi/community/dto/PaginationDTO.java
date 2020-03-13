@@ -12,20 +12,38 @@ import java.util.List;
  */
 @Data
 public class PaginationDTO {
-    private boolean showFirstPage;                      //首页
-    private boolean showPrevious;                       //上一页
-    private boolean showNext;                           //下一页
-    private boolean showEndPage;                        //最后一页
-    private Integer totalPage;                          //总页数
-    private Integer page;                               //当前页数
-    private List<QuestionDTO> questions;                //Question列表
-    private List<Integer> pages = new ArrayList<>();    //用来展示的页码
+    /**
+     * 是否展示首页
+    */
+    private Boolean showFirstPage;
+    /**
+     * 是否展示上一页
+     */
+    private Boolean showPrevious;
+    /**
+     * 是否展示下一页
+     */
+    private Boolean showNext;
+    /**
+     * 是否展示最后一页
+     */
+    private Boolean showEndPage;
+    /**
+     * 总页数
+     */
+    private Integer totalPage;
+    /**
+     * 页码
+     */
+    private Integer page;
+    private List<QuestionDTO> questions;
+    private List<Integer> pages;
 
     /**
      * @param totalCount 问题条数
-     * @return 返回当前页码数 - 1
+     * @return 返回第一个返回记录行的偏移量，初始量为0
      */
-    public Integer setPagination(Integer totalCount, Integer page, Integer pageSize) {
+    public Integer getPagination(Integer totalCount, Integer page, Integer pageSize) {
         //获取总页数
         if (totalCount % pageSize == 0) {
             totalPage = totalCount / pageSize;
@@ -39,28 +57,26 @@ public class PaginationDTO {
         if (page > totalPage) {
             page = totalPage;
         }
-        //计算数据库查询时需要的Limit的左侧条件，用来返回
         Integer offset = pageSize * (page - 1);
+        int part = 3;
         //添加页码，展示7个
+        pages = new ArrayList<>();
         pages.add(page);
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= part; i++) {
             if (page - i > 0) {
-                pages.add(0, page - i);  //每次都添加进集合的首部
+                //每次都添加进集合的首部
+                pages.add(0, page - i);
             }
             if (page + i <= totalPage) {
-                pages.add(page + i);                     //在集合的尾部追加数据
+                //在集合的尾部追加数据
+                pages.add(page + i);
             }
         }
         this.page = page;
-        //展示上一页按钮
         showPrevious = (page != 1);
-        //展示下一页按钮
         showNext = (!page.equals(totalPage));
-        //展示首页按钮
         showFirstPage = !pages.contains(1);
-        //展示最后一页按钮
         showEndPage = !pages.contains(totalPage);
-
         return offset;
     }
 }
