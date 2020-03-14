@@ -1,12 +1,14 @@
 package com.chenxi.community.controller;
 
-import com.chenxi.community.mapper.QuestionMapper;
+import com.chenxi.community.dto.QuestionDTO;
 import com.chenxi.community.model.Question;
 import com.chenxi.community.model.User;
+import com.chenxi.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,10 +23,21 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
 
-    @GetMapping("/publish")     //默认请求
+    @GetMapping("/publish")
     public String publish(){
+        return "publish";
+    }
+
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                       Model model){
+        QuestionDTO questionDTO = questionService.getQuestionById(id);
+        model.addAttribute("title",questionDTO.getTitle());
+        model.addAttribute("description",questionDTO.getDescription());
+        model.addAttribute("tag",questionDTO.getTag());
+        model.addAttribute("id", id);
         return "publish";
     }
 
@@ -33,6 +46,7 @@ public class PublishController {
             @RequestParam(value="title",required = false) String title,
             @RequestParam(value = "description",required = false) String description,
             @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "id", required = false) Integer id,
             HttpServletRequest request,
             Model model){
         //添加进model，用来前端展示
@@ -59,17 +73,16 @@ public class PublishController {
             return "publish";
         }
 
-        //获取Question对象，存进数据库
-        //获取当前用户对象，question.creator = user.id
+        //获取Question对象，判断是否存进数据库
+        //获取当前用户对象，question.creator = user.accountId
         User user = (User)request.getSession().getAttribute("user");
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
         question.setCreator(user.getAccountId());
-        questionMapper.create(question);
+        question.setId(id);
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }

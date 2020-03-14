@@ -1,10 +1,7 @@
 package com.chenxi.community.mapper;
 
 import com.chenxi.community.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -63,4 +60,11 @@ public interface QuestionMapper {
      */
     @Select("SELECT * FROM QUESTION WHERE id = #{id}")
     Question getQuestionById(@Param(value = "id") Integer id);
+
+    /**
+     * 更新数据库中的问题记录
+     * @param question 最新的Question对象
+     */
+    @Update("UPDATE QUESTION SET title = #{title}, description = #{description}, tag = #{tag}, gmt_modified = #{gmtModified} WHERE id = #{id}")
+    void update(Question question);
 }

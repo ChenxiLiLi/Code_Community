@@ -66,4 +66,15 @@ public class QuestionServiceImpl implements QuestionService {
         return questionDTO;
     }
 
+    @Override
+    public void createOrUpdate(Question question) {
+        if (question.getId() == null) {
+            //创建问题记录
+            questionMapper.create(question);
+        }else {
+            //更新问题内容
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.update(question);
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.chenxi.community.service;
 
 import com.chenxi.community.dto.PaginationDTO;
 import com.chenxi.community.dto.QuestionDTO;
+import com.chenxi.community.model.Question;
 
 /**
  * @Author: Mr.Chen
@@ -24,4 +25,10 @@ public interface QuestionService {
      * @return QuestionDTO对象
      */
     QuestionDTO getQuestionById(Integer id);
+
+    /**
+     * 根据Question的情况判断是否更新Question内容
+     * @param question 问题对象
+     */
+    void createOrUpdate(Question question);
 }
