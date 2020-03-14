@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @Author: Mr.Chen
- * @Description:
+ * @Description: 通用拦截器
  * @Date:Created in 15:20 2020/3/11
  */
 @Configuration

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Author: Mr.Chen
- * @Description:
+ * @Description: 处理问题请求控制器
  * @Date:Created in 0:44 2020/3/7
  */
 @Controller
@@ -41,7 +41,7 @@ public class PublishController {
         return "publish";
     }
 
-    @PostMapping("/publish")    //发布响应请求
+    @PostMapping("/publish")
     public String doPublish(
             @RequestParam(value="title",required = false) String title,
             @RequestParam(value = "description",required = false) String description,

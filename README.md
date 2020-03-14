@@ -32,3 +32,10 @@ Markdown(支持markdown格式)
 ### 工具
 [Git](https://git-scm.com/download)  
 [Visual-paradigm](https://www.visual-paradigm.com)
+
+#### 相关命令
+git add .  
+git commit -m "message"  
+git push  
+mvn flyway:migrate  
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate  

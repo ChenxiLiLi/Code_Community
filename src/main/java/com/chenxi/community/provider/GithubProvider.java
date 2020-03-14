@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * @Author: Mr.Chen
- * @Description: Github登录，提供访问令牌对象
+ * @Description: Github登录，提供访问令牌对象和获取GithubUser对象
  * @Date:Created in 21:47 2020/3/2
  */
 @Component
@@ -34,7 +34,6 @@ public class GithubProvider {
     }
 
     public GithubUser getUser(String accessToken){
-        System.out.println("getUser使用的"+accessToken);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
             .url("https://api.github.com/user?access_token=" + accessToken)

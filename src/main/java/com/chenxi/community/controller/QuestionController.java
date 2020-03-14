@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @Author: Mr.Chen
- * @Description: 问题控制器
+ * @Description: 处理问题更新控制器
  * @Date:Created in 20:49 2020/3/13
  */
 @Controller

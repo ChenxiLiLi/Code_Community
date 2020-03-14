@@ -19,7 +19,7 @@ import java.util.UUID;
 
 /**
  * @Author: Mr.Chen
- * @Description: 登录控制器
+ * @Description: 处理用户登录控制器
  * @Date:Created in 18:31 2020/3/2
  */
 @Controller

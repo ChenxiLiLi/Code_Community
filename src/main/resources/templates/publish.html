@@ -12,7 +12,7 @@
 <body>
 
 <div th:replace="navigation :: myfooter"></div>
-<div class="container-fluid main">
+<div class="container-fluid main" th:if="${session.user != null}">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span class="glyphicon glyphicon-send" aria-hidden="true"> 发起</span></h3>
@@ -45,6 +45,8 @@
         </div>
     </div>
 </div>
-
+<div class="alert alert-warning" role="alert" th:if="${session.user == null}">
+    请先登录！！！
+</div>
 </body>
 </html>

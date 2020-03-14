@@ -5,7 +5,10 @@ import com.chenxi.community.dto.QuestionDTO;
 import com.chenxi.community.mapper.QuestionMapper;
 import com.chenxi.community.mapper.UserMapper;
 import com.chenxi.community.model.Question;
+import com.chenxi.community.model.QuestionExample;
 import com.chenxi.community.model.User;
+import com.chenxi.community.model.UserExample;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,28 +32,28 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public PaginationDTO getPaginationDTOList(String accountId, Integer page, Integer pageSize) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount;         //问题条数
+        int totalCount;             //问题条数
         Integer offset;             //limit查询限制条件
         List<Question> questions;   //Question集合
         if ("0".equals(accountId)) {
             //查询全部问题
-            totalCount = questionMapper.count();
+            totalCount = (int)questionMapper.countByExample(new QuestionExample());
             offset = paginationDTO.getPagination(totalCount, page, pageSize);
-            questions = questionMapper.list(offset, pageSize);
+            questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, pageSize));
         } else {
-            //查询当前用户发布的问题
-            totalCount = questionMapper.userCount(accountId);
+            //!!!查询当前用户发布的问题
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria()
+                    .andCreatorEqualTo(accountId);
+            totalCount = (int)questionMapper.countByExample(questionExample);
             offset = paginationDTO.getPagination(totalCount, page, pageSize);
-            questions = questionMapper.userList(accountId, offset, pageSize);
+            questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, pageSize));
         }
         //QuestionDTO封装Question和User
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
-            User user = userMapper.findByAccountId(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setUser(user);
-            questionDTOList.add(questionDTO);
+            questionDTOList.add(creatorWithAccountId(question, questionDTO));
         }
         paginationDTO.setQuestions(questionDTOList);
         return paginationDTO;
@@ -59,22 +62,42 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDTO getQuestionById(Integer id) {
         QuestionDTO questionDTO = new QuestionDTO();
-        Question question = questionMapper.getQuestionById(id);
-        User user = userMapper.findByAccountId(question.getCreator());
-        BeanUtils.copyProperties(question, questionDTO);
-        questionDTO.setUser(user);
-        return questionDTO;
+        Question question = questionMapper.selectByPrimaryKey(id);
+        return creatorWithAccountId(question, questionDTO);
     }
 
     @Override
     public void createOrUpdate(Question question) {
         if (question.getId() == null) {
             //创建问题记录
-            questionMapper.create(question);
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.insert(question);
         }else {
             //更新问题内容
-            question.setGmtModified(question.getGmtCreate());
-            questionMapper.update(question);
+            Question updateQuestion = new Question();
+            updateQuestion.setGmtModified(System.currentTimeMillis());
+            System.out.println(updateQuestion.getGmtModified());
+            updateQuestion.setTitle(question.getTitle());
+            updateQuestion.setDescription(question.getDescription());
+            updateQuestion.setTag(question.getTag());
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria()
+                    .andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
         }
+    }
+
+    /**
+     * 通过关联creator和accountId查找数据库获取QuestionDTO对象
+     */
+    private QuestionDTO creatorWithAccountId(Question question, QuestionDTO questionDTO){
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andAccountIdEqualTo(question.getCreator());
+        List<User> users = userMapper.selectByExample(userExample);
+        BeanUtils.copyProperties(question, questionDTO);
+        questionDTO.setUser(users.get(0));
+        return questionDTO;
     }
 }

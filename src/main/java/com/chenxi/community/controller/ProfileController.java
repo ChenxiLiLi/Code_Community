@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Author: Mr.Chen
- * @Description: 个人中心
+ * @Description: 个人中心控制器
  * @Date:Created in 13:55 2020/3/11
  */
 @Controller
