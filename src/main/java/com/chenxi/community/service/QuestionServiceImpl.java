@@ -5,6 +5,7 @@ import com.chenxi.community.dto.PaginationDTO;
 import com.chenxi.community.dto.QuestionDTO;
 import com.chenxi.community.exception.MyErrorCode;
 import com.chenxi.community.exception.MyException;
+import com.chenxi.community.mapper.QuestionExtMapper;
 import com.chenxi.community.mapper.QuestionMapper;
 import com.chenxi.community.mapper.UserMapper;
 import com.chenxi.community.model.Question;
@@ -31,6 +32,8 @@ public class QuestionServiceImpl implements QuestionService {
     private UserMapper userMapper;
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Override
     public PaginationDTO getPaginationDTOList(String accountId, Integer page, Integer pageSize) {
@@ -95,6 +98,14 @@ public class QuestionServiceImpl implements QuestionService {
                 throw new MyException(MyErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    @Override
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 
     /**

@@ -31,4 +31,10 @@ public interface QuestionService {
      * @param question 问题对象
      */
     void createOrUpdate(Question question);
+
+    /**
+     * 更新阅读数
+     * @param id Question的唯一标识
+     */
+    void incView(Integer id);
 }
