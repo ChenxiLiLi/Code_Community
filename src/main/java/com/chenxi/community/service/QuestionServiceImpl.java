@@ -1,7 +1,10 @@
 package com.chenxi.community.service;
 
+import com.chenxi.community.advice.CustomizeExceptionHandler;
 import com.chenxi.community.dto.PaginationDTO;
 import com.chenxi.community.dto.QuestionDTO;
+import com.chenxi.community.exception.MyErrorCode;
+import com.chenxi.community.exception.MyException;
 import com.chenxi.community.mapper.QuestionMapper;
 import com.chenxi.community.mapper.UserMapper;
 import com.chenxi.community.model.Question;
@@ -37,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questions;   //Question集合
         if ("0".equals(accountId)) {
             //查询全部问题
-            totalCount = (int)questionMapper.countByExample(new QuestionExample());
+            totalCount = (int) questionMapper.countByExample(new QuestionExample());
             offset = paginationDTO.getPagination(totalCount, page, pageSize);
             questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, pageSize));
         } else {
@@ -45,7 +48,7 @@ public class QuestionServiceImpl implements QuestionService {
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
                     .andCreatorEqualTo(accountId);
-            totalCount = (int)questionMapper.countByExample(questionExample);
+            totalCount = (int) questionMapper.countByExample(questionExample);
             offset = paginationDTO.getPagination(totalCount, page, pageSize);
             questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, pageSize));
         }
@@ -63,6 +66,9 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDTO getQuestionById(Integer id) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new MyException(MyErrorCode.QUESTION_NOT_FOUND);
+        }
         return creatorWithAccountId(question, questionDTO);
     }
 
@@ -73,7 +79,7 @@ public class QuestionServiceImpl implements QuestionService {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insert(question);
-        }else {
+        } else {
             //更新问题内容
             Question updateQuestion = new Question();
             updateQuestion.setGmtModified(System.currentTimeMillis());
@@ -84,14 +90,17 @@ public class QuestionServiceImpl implements QuestionService {
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if (updated != 1) {
+                throw new MyException(MyErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 
     /**
      * 通过关联creator和accountId查找数据库获取QuestionDTO对象
      */
-    private QuestionDTO creatorWithAccountId(Question question, QuestionDTO questionDTO){
+    private QuestionDTO creatorWithAccountId(Question question, QuestionDTO questionDTO) {
         UserExample userExample = new UserExample();
         userExample.createCriteria()
                 .andAccountIdEqualTo(question.getCreator());
