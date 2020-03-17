@@ -15,8 +15,7 @@ public interface QuestionExtMapper {
     /**
      * 更新阅读数
      * @param question 问题对象
-     * @return 返回更新结果 1为更新成功
      */
-    int incView(Question question);
+    void incView(Question question);
 
 }
