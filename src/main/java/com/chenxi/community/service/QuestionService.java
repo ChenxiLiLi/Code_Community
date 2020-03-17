@@ -24,7 +24,7 @@ public interface QuestionService {
      * @param id Question的唯一标识
      * @return QuestionDTO对象
      */
-    QuestionDTO getQuestionById(Integer id);
+    QuestionDTO getQuestionById(Long id);
 
     /**
      * 根据Question的情况判断是否更新Question内容
@@ -36,5 +36,5 @@ public interface QuestionService {
      * 更新阅读数
      * @param id Question的唯一标识
      */
-    void incView(Integer id);
+    void incView(Long id);
 }
