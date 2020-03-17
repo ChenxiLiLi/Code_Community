@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Author: Mr.Chen
- * @Description: 自定制错误控制器
+ * @Description: 自定制错误控制器, 用来返回自己定义的值
  * @Date:Created in 23:38 2020/3/15
  */
 @Controller
-@RequestMapping("${server.error.path:${error.path:/error}}")
+@RequestMapping("${server.error.path:${error.path:/error}}") /*/error*/
 public class CustomizeErrorController implements ErrorController {
 
     @Override
@@ -37,6 +37,11 @@ public class CustomizeErrorController implements ErrorController {
         return new ModelAndView("error");
     }
 
+    /**
+     * 获取状态码
+     * @param request HTTP请求
+     * @return 状态码
+     */
     private HttpStatus getStatus(HttpServletRequest request) {
         Integer statusCode = (Integer) request
                 .getAttribute("javax.servlet.error.status_code");

@@ -105,7 +105,7 @@ public class QuestionServiceImpl implements QuestionService {
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);
-        questionExtMapper.incView(question);
+        questionExtMapper.incViewCount(question);
     }
 
     /**

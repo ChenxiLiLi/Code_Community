@@ -16,6 +16,12 @@ public interface QuestionExtMapper {
      * 更新阅读数
      * @param question 问题对象
      */
-    void incView(Question question);
+    void incViewCount(Question question);
+
+    /**
+     * 更新评论数
+     * @param question 问题对象
+     */
+    void incCommentCount(Question question);
 
 }
