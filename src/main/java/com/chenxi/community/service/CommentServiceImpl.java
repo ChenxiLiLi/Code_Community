@@ -10,6 +10,7 @@ import com.chenxi.community.model.Comment;
 import com.chenxi.community.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author: Mr.Chen
@@ -27,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
     private QuestionExtMapper questionExtMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insert(Comment comment) {
         //插入评论记录之前需要判断parentId是否存在，即当前问题是否存在，可能在评论之前被删除了
         if (comment.getParentId() == null || comment.getParentId() == 0) {

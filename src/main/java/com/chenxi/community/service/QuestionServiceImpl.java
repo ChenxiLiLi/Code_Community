@@ -1,6 +1,5 @@
 package com.chenxi.community.service;
 
-import com.chenxi.community.advice.CustomizeExceptionHandler;
 import com.chenxi.community.dto.PaginationDTO;
 import com.chenxi.community.dto.QuestionDTO;
 import com.chenxi.community.exception.MyErrorCode;
