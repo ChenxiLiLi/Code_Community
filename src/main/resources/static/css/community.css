@@ -47,6 +47,43 @@ body {
     font-weight: 600;
     margin-top: 15px;
 }
+
 .jumbotron {
     margin: 50px;
+}
+
+.comment-head {
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.comment-head h2 {
+    line-height: 60px;
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.comment-top {
+    margin-top: 20px;
+}
+
+.menu {
+    color: #999;
+    margin-top: 5px;
+}
+
+.menu .icon {
+    margin-right: 9px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.menu .icon:hover {
+    color: #499ef3;
+}
+
+.comments {
+    padding: 9px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e6e6e6;
 }

@@ -1,6 +1,6 @@
 package com.chenxi.community.controller;
 
-import com.chenxi.community.dto.CommentDTO;
+import com.chenxi.community.dto.CommentCreateDTO;
 import com.chenxi.community.dto.ResultDTO;
 import com.chenxi.community.exception.MyErrorCode;
 import com.chenxi.community.model.Comment;
@@ -28,7 +28,7 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDTO commentDTO, HttpServletRequest request) {
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO, HttpServletRequest request) {
 
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
@@ -38,9 +38,9 @@ public class CommentController {
             comment.setCommentator(user.getAccountId());
             comment.setGmtModified(System.currentTimeMillis());
             comment.setGmtCreate(System.currentTimeMillis());
-            comment.setParentId(commentDTO.getParentId());
-            comment.setType(commentDTO.getType());
-            comment.setContent(commentDTO.getContent());
+            comment.setParentId(commentCreateDTO.getParentId());
+            comment.setType(commentCreateDTO.getType());
+            comment.setContent(commentCreateDTO.getContent());
             comment.setLikeCount(0L);
             commentService.insert(comment);
             return ResultDTO.okOf();
