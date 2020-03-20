@@ -6,6 +6,7 @@ import com.chenxi.community.exception.MyErrorCode;
 import com.chenxi.community.model.Comment;
 import com.chenxi.community.model.User;
 import com.chenxi.community.service.CommentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,17 +34,21 @@ public class CommentController {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             return ResultDTO.errorOf(MyErrorCode.NOT_LOGIN);
-        } else {
-            Comment comment = new Comment();
-            comment.setCommentator(user.getAccountId());
-            comment.setGmtModified(System.currentTimeMillis());
-            comment.setGmtCreate(System.currentTimeMillis());
-            comment.setParentId(commentCreateDTO.getParentId());
-            comment.setType(commentCreateDTO.getType());
-            comment.setContent(commentCreateDTO.getContent());
-            comment.setLikeCount(0L);
-            commentService.insert(comment);
-            return ResultDTO.okOf();
         }
+
+        //判断评论内容是否为空
+        if (commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())) {
+            return ResultDTO.errorOf(MyErrorCode.CONTENT_IS_EMPTY);
+        }
+        Comment comment = new Comment();
+        comment.setCommentator(user.getAccountId());
+        comment.setGmtModified(System.currentTimeMillis());
+        comment.setGmtCreate(System.currentTimeMillis());
+        comment.setParentId(commentCreateDTO.getParentId());
+        comment.setType(commentCreateDTO.getType());
+        comment.setContent(commentCreateDTO.getContent());
+        comment.setLikeCount(0L);
+        commentService.insert(comment);
+        return ResultDTO.okOf();
     }
 }

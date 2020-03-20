@@ -44,7 +44,7 @@ body {
 
 .font-style {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     margin-top: 15px;
 }
 
@@ -52,19 +52,13 @@ body {
     margin: 50px;
 }
 
-.comment-head {
-    border-bottom: 1px solid #e6e6e6;
-}
-
-.comment-head h2 {
-    line-height: 60px;
-    margin: 0;
-    font-size: 20px;
-    color: #333;
-}
-
 .comment-top {
-    margin-top: 20px;
+    margin-top: 10px;
+}
+
+.comment-head {
+    margin-top: 30px;
+    margin-bottom: 10px;
 }
 
 .menu {
@@ -82,8 +76,11 @@ body {
     color: #499ef3;
 }
 
-.comments {
-    padding: 9px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #e6e6e6;
+.line-style {
+    margin: 10px 0;
+}
+
+.media {
+    margin-top: 30px;
+    margin-bottom: 12px;
 }

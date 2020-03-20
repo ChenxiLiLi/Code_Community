@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${question.title}"></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
@@ -15,29 +15,39 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h3><span th:text="${question.title}"></span></h3>
-            <span class="text-desc">
-                作者: <span th:text="${question.user.name}"></span>
-                发布时间: <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
-                阅读数: <span th:text="${question.viewCount}"></span>&nbsp;&nbsp;
-                 <a class="community-menu" th:href="@{'/publish/'+${question.id}}" th:if="${session.user != null && session.user.accountId.equals(question.creator)}">
-                    <div class="pull-right">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                        编辑
-                    </div>
-                </a>
-            </span><br>
-            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}"></div>
-            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <!--回复-->
-            <div class="comment-head">
-                <h2>
-                    <span th:text="${question.commentCount}"></span> 个回复
-                </h2>
+            <!-- 问题信息展示 -->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3>
+                    <span th:text="${question.title}"></span>
+                </h3>
+                <span class="text-desc">
+                    作者: <span th:text="${question.user.name}"></span>
+                    发布时间: <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+                    阅读数: <span th:text="${question.viewCount}"></span>&nbsp;&nbsp;
+                     <a class="community-menu" th:href="@{'/publish/'+${question.id}}"
+                        th:if="${session.user != null && session.user.accountId.equals(question.creator)}">
+                        <div class="pull-right">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            编辑
+                        </div>
+                    </a>
+                </span>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <span th:text="${question.description}"></span>
+                </div>
+                <br>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            </div>
+            <!--回复数-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-head">
+                <h4>
+                    <span th:text="${question.commentCount}"></span> 个评论
+                </h4>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 line-style">
             </div>
             <!--评论列表 -->
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-top comments" th:each="comment: ${comments}">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-top" th:each="comment: ${comments}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded" th:src="${comment.user.avatarUrl}" alt="用户头像"/>
@@ -56,23 +66,30 @@
                         <span class="pull-right" th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
                     </div>
                 </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 line-style">
             </div>
-            <div class="media col-lg-12 col-md-12 col-sm-12 col-xs-12" id="reply_section">
+            <!-- 回复板块 -->
+            <div class="media col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${session.user != null}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded" th:src="${question.user.avatarUrl}" alt="用户头像"/>
                     </a>
                 </div>
                 <div class="media-body">
-                    <h5>
-                        <span th:text="${question.user.name}"></span>
-                    </h5>
+                    <input type="hidden" id="question_id" th:value="${question.id}">
+                    <textarea class="form-control" rows="6" id="comment_content" placeholder="写下你的评论..."></textarea>
                 </div>
-                <input type="hidden" id="question_id" th:value="${question.id}">
-                <textarea class="form-control" rows="6" id="comment_content"></textarea>
                 <button type="submit" class="btn btn-info btn-publish" onclick="post()">回复</button>
             </div>
+            <div th:if="${session.user == null}">
+                <p align="center">
+                    要回复文章请先进行<a
+                        href="https://github.com/login/oauth/authorize?client_id=1098b0f922ff4ba70fec&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录
+                    </a>
+                </p>
+            </div>
         </div>
+        <!-- 侧边栏解释说明 -->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="background-color: black;height: 5px">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4 class="font-style">发起人</h4>
@@ -89,7 +106,7 @@
                     </div>
                 </div>
             </div>
-            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 line-style">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4 class="font-style">相关问题</h4>
             </div>

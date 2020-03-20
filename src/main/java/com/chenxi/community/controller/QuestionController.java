@@ -32,7 +32,6 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.getQuestionById(id);
         //获取评论列表DTO对象
         List<CommentDTO> commentList = commentService.getListByQuestionId(id);
-        System.out.println(commentList.size());
         //一次点击之后阅读数+1
         questionService.incView(id);
         model.addAttribute("question", questionDTO);

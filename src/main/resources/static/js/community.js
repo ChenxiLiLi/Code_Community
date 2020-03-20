@@ -4,6 +4,12 @@
 function post() {
     var questionId = $("#question_id").val();
     var context = $("#comment_content").val();
+    //前端也需要做校验，提高反应速度
+    if (!context) {
+        alert("评论内容不能为空");
+        return;
+    }
+
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -15,7 +21,8 @@ function post() {
         }),
         success: function (response) {
             if (response.code === 200) {
-                $("#reply_section").hide();
+                //追加最新的评论
+                window.location.reload();
             } else {
                 if (response.code === 2003) {
                     window.localStorage.setItem("isClosed", "true");
