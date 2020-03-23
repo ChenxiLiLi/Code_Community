@@ -73,12 +73,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDTO> getListByQuestionId(Long id) {
-        //查找当前问题的所有评论
+    public List<CommentDTO> getListByTargetId(Long id, CommentTypeEnum typeEnum) {
+        //查找当前问题的所有评论/当前评论的所有回复
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
                 .andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+                .andTypeEqualTo(typeEnum.getType());
+        commentExample.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
 
         if (comments.size() == 0) {

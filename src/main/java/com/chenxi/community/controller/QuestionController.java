@@ -2,6 +2,7 @@ package com.chenxi.community.controller;
 
 import com.chenxi.community.dto.CommentDTO;
 import com.chenxi.community.dto.QuestionDTO;
+import com.chenxi.community.enums.CommentTypeEnum;
 import com.chenxi.community.service.CommentService;
 import com.chenxi.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class QuestionController {
         //获取问题展示DTO对象
         QuestionDTO questionDTO = questionService.getQuestionById(id);
         //获取评论列表DTO对象
-        List<CommentDTO> commentList = commentService.getListByQuestionId(id);
+        List<CommentDTO> commentList = commentService.getListByTargetId(id, CommentTypeEnum.QUESTION);
         //一次点击之后阅读数+1
         questionService.incView(id);
         model.addAttribute("question", questionDTO);

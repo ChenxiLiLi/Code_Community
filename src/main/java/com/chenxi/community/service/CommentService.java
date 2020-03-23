@@ -1,6 +1,7 @@
 package com.chenxi.community.service;
 
 import com.chenxi.community.dto.CommentDTO;
+import com.chenxi.community.enums.CommentTypeEnum;
 import com.chenxi.community.model.Comment;
 
 import java.util.List;
@@ -19,8 +20,9 @@ public interface CommentService {
 
     /**
      * 返回评论列表集合
-     * @param id Question的ID
+     * @param id 选中的id(可能为questionId, 也可能为commentId)
+     * @param typeEnum 枚举对象，Question/Comment
      * @return 封装的列表集合
      */
-    List<CommentDTO> getListByQuestionId(Long id);
+    List<CommentDTO> getListByTargetId(Long id, CommentTypeEnum typeEnum);
 }

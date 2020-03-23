@@ -1,23 +1,38 @@
 /**
- * 问题板块的回复功能
+ * 问题板块一级评论
  */
 function post() {
     var questionId = $("#question_id").val();
-    var context = $("#comment_content").val();
+    var content = $("#comment_content").val();
+    comment(questionId, 1, content);
+}
+
+/**
+ * 问题板块的子评论
+ */
+function subComment(e){
+    var commentId = e.getAttribute("data-id");
+    var content = $("#input-" + commentId).val();
+    comment(commentId, 2, content);
+}
+
+/**
+ * 评论板块封装方法
+ */
+function comment(targetId, type, content){
     //前端也需要做校验，提高反应速度
     if (!context) {
         alert("评论内容不能为空");
         return;
     }
-
     $.ajax({
         type: "POST",
         contentType: "application/json",
         url: "/comment",
         data: JSON.stringify({
-            "parentId": questionId,
-            "type": 1,
-            "content": context
+            "parentId": targetId,
+            "type": type,
+            "content": content
         }),
         success: function (response) {
             if (response.code === 200) {
@@ -38,4 +53,15 @@ function post() {
         },
         dataType: "json"
     });
+}
+
+/**
+ * 二级评论展示
+ */
+function collapseComments(e) {
+    var id = e.getAttribute("data-id");
+    var comments = $("#comment-" + id);
+    var icon = $("#comment-icon");
+    comments.toggleClass("in");
+    icon.toggleClass("active");
 }

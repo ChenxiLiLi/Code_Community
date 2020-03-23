@@ -1,7 +1,9 @@
 package com.chenxi.community.controller;
 
 import com.chenxi.community.dto.CommentCreateDTO;
+import com.chenxi.community.dto.CommentDTO;
 import com.chenxi.community.dto.ResultDTO;
+import com.chenxi.community.enums.CommentTypeEnum;
 import com.chenxi.community.exception.MyErrorCode;
 import com.chenxi.community.model.Comment;
 import com.chenxi.community.model.User;
@@ -9,12 +11,10 @@ import com.chenxi.community.service.CommentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author: Mr.Chen
@@ -50,5 +50,14 @@ public class CommentController {
         comment.setLikeCount(0L);
         commentService.insert(comment);
         return ResultDTO.okOf();
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/comment/{id}")
+    public ResultDTO<List<CommentDTO>> comment(@PathVariable(name = "id") Long id){
+        //获取当前评论的子评论，子评论的parentId为当前评论的id，type=2
+        List<CommentDTO> subCommentsDTO = commentService.getListByTargetId(id, CommentTypeEnum.COMMENT);
+        //返回封装的数据对象
+        return ResultDTO.okOf(subCommentsDTO);
     }
 }
