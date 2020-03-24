@@ -24,4 +24,10 @@ public interface QuestionExtMapper {
      */
     void incCommentCount(Question question);
 
+    /**
+     * 展示相关问题
+     * @param question 问题对象
+     * @return 与当前问题包含的Tag相关联的问题的集合
+     */
+    List<Question> selectRelatedQuestion(Question question);
 }

@@ -4,6 +4,8 @@ import com.chenxi.community.dto.PaginationDTO;
 import com.chenxi.community.dto.QuestionDTO;
 import com.chenxi.community.model.Question;
 
+import java.util.List;
+
 /**
  * @Author: Mr.Chen
  * @Description:
@@ -37,4 +39,11 @@ public interface QuestionService {
      * @param id Question的唯一标识
      */
     void incView(Long id);
+
+    /**
+     * 展示相关问题
+     * @param questionDTO 问题对象
+     * @return 与当前问题包含的Tag相关联的问题的集合
+     */
+    List<QuestionDTO> getRelatedQuestion(QuestionDTO questionDTO);
 }

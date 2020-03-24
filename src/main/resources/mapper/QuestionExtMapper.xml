@@ -24,10 +24,15 @@
     VIEW_COUNT = VIEW_COUNT + #{viewCount,jdbcType=INTEGER}
     where id = #{id}
   </update>
+
   <update id="incCommentCount" parameterType="com.chenxi.community.model.Question">
     update QUESTION
     set
     COMMENT_COUNT = COMMENT_COUNT + #{commentCount,jdbcType=INTEGER}
     where id = #{id}
   </update>
+
+  <select id="selectRelatedQuestion" parameterType="com.chenxi.community.model.Question" resultMap="BaseResultMap">
+    select * from QUESTION WHERE id != #{id} and tag regexp #{tag}
+  </select>
 </mapper>

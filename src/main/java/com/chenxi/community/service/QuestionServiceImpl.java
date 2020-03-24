@@ -11,13 +11,17 @@ import com.chenxi.community.model.Question;
 import com.chenxi.community.model.QuestionExample;
 import com.chenxi.community.model.User;
 import com.chenxi.community.model.UserExample;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Author: Mr.Chen
@@ -40,14 +44,16 @@ public class QuestionServiceImpl implements QuestionService {
         int totalCount;             //问题条数
         Integer offset;             //limit查询限制条件
         List<Question> questions;   //Question集合
+        QuestionExample questionExample = new QuestionExample();
+        //设置问题根据创建时间降序排列
+        questionExample.setOrderByClause("gmt_create desc");
         if ("0".equals(accountId)) {
             //查询全部问题
             totalCount = (int) questionMapper.countByExample(new QuestionExample());
             offset = paginationDTO.getPagination(totalCount, page, pageSize);
-            questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, pageSize));
+            questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, pageSize));
         } else {
             //查询当前用户发布的问题
-            QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
                     .andCreatorEqualTo(accountId);
             totalCount = (int) questionMapper.countByExample(questionExample);
@@ -104,10 +110,32 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void incView(Long id) {
+        //增加阅读数
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);
         questionExtMapper.incViewCount(question);
+    }
+
+    @Override
+    public List<QuestionDTO> getRelatedQuestion(QuestionDTO questionDTO) {
+        //获取当前问题的所有标签
+        String[] tags = StringUtils.split(questionDTO.getTag(), ",");
+        //将标签用|隔开 e.g: "TagA|TagB|TagC"，应用正则表达式
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        //设置Question对象
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        question.setTag(regexpTag);
+        //查找相关的问题
+        List<Question> questions = questionExtMapper.selectRelatedQuestion(question);
+        //将问题转换成QuestionDTO集合返回
+        List<QuestionDTO> QuestionDTOs = questions.stream().map(p -> {
+           QuestionDTO questionDTO1 = new QuestionDTO();
+           BeanUtils.copyProperties(p, questionDTO1);
+           return questionDTO1;
+        }).collect(Collectors.toList());
+        return QuestionDTOs;
     }
 
     /**

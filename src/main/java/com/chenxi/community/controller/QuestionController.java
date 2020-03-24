@@ -31,12 +31,15 @@ public class QuestionController {
                            Model model){
         //获取问题展示DTO对象
         QuestionDTO questionDTO = questionService.getQuestionById(id);
+        //获取与当前问题相关联的问题对象
+        List<QuestionDTO> relatedQuestions = questionService.getRelatedQuestion(questionDTO);
         //获取评论列表DTO对象
         List<CommentDTO> commentList = commentService.getListByTargetId(id, CommentTypeEnum.QUESTION);
         //一次点击之后阅读数+1
         questionService.incView(id);
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", commentList);
+        model.addAttribute("relatedQuestions", relatedQuestions);
         return "question";
     }
 }

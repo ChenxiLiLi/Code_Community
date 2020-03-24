@@ -17,6 +17,26 @@ body {
     font-size: 13px;
 }
 
+.community-tag:hover {
+    background-color: #339dff;
+    color: #fff !important;
+    text-decoration-line: none;
+}
+
+.community-tag {
+    text-decoration-line: none;
+    cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    line-height: 16px;
+    padding: 2px 5px;
+    background-color: #99cfff;
+    font-size: 12px;
+    color: #fff !important;
+    border-radius: 4px;
+    margin: 4px;
+}
+
 .comment-top {
     margin-top: 10px;
 }
@@ -34,6 +54,11 @@ body {
 
 .heading {
     color: #2aabd2;
+}
+
+.img-style {
+    width: 95%;
+    margin-top: 11px
 }
 
 .jumbotron {
@@ -85,6 +110,18 @@ body {
 
 .profile .section {
     margin-top: 20px;
+}
+
+.question-tag {
+    margin-right: 5px;
+}
+
+.question-related {
+    line-height: 24px;
+    font-size: 15px;
+    margin-left: 0;
+    list-style: none;
+    padding-left: 0;
 }
 
 .sub-comments {
