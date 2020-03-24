@@ -48,6 +48,7 @@ public class CommentController {
         comment.setType(commentCreateDTO.getType());
         comment.setContent(commentCreateDTO.getContent());
         comment.setLikeCount(0L);
+        comment.setCommentCount(0);
         commentService.insert(comment);
         return ResultDTO.okOf();
     }
@@ -57,7 +58,7 @@ public class CommentController {
     public ResultDTO<List<CommentDTO>> comment(@PathVariable(name = "id") Long id){
         //获取当前评论的子评论，子评论的parentId为当前评论的id，type=2
         List<CommentDTO> subCommentsDTO = commentService.getListByTargetId(id, CommentTypeEnum.COMMENT);
-        //返回封装的数据对象
+        //返回封装的子评论对象
         return ResultDTO.okOf(subCommentsDTO);
     }
 }

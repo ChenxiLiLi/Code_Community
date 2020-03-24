@@ -4,10 +4,7 @@ import com.chenxi.community.dto.CommentDTO;
 import com.chenxi.community.enums.CommentTypeEnum;
 import com.chenxi.community.exception.MyErrorCode;
 import com.chenxi.community.exception.MyException;
-import com.chenxi.community.mapper.CommentMapper;
-import com.chenxi.community.mapper.QuestionExtMapper;
-import com.chenxi.community.mapper.QuestionMapper;
-import com.chenxi.community.mapper.UserMapper;
+import com.chenxi.community.mapper.*;
 import com.chenxi.community.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,8 @@ public class CommentServiceImpl implements CommentService {
     private QuestionExtMapper questionExtMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private CommentExtMapper commentExtMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -50,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
         }
         //根据评论类型做相应的处理
         if (comment.getType().equals(CommentTypeEnum.COMMENT.getType())) {
-            //回复评论
+            //子评论
             //1、查看当前评论是否存在
             Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
             if (dbComment == null) {
@@ -58,8 +57,11 @@ public class CommentServiceImpl implements CommentService {
             }
             //2、存在则插入一条评论记录
             commentMapper.insert(comment);
+            //3、更新子评论数
+            dbComment.setCommentCount(1);
+            commentExtMapper.incCommentCount(dbComment);
         } else {
-            //回复问题
+            //评论问题
             //1、判断当前停留页面的问题是否存在
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
             if (question == null) {

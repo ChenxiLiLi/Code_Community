@@ -2,35 +2,10 @@ body {
     background-color: #efefef;
 }
 
-.main {
-    margin: 30px;
-    background-color: white;
-}
-
 .btn-publish {
     float: right;
     margin: 15px 0;
     width: 90px;
-}
-
-.media-object {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 15px;
-}
-
-.text-desc {
-    font-size: 12px;
-    font-weight: normal;
-    color: #999;
-}
-
-.pull-right {
-    float: right !important;
-}
-
-.profile .section {
-    margin-top: 20px;
 }
 
 .badge {
@@ -42,16 +17,6 @@ body {
     font-size: 13px;
 }
 
-.font-style {
-    font-size: 16px;
-    font-weight: 500;
-    margin-top: 15px;
-}
-
-.jumbotron {
-    margin: 50px;
-}
-
 .comment-top {
     margin-top: 10px;
 }
@@ -61,16 +26,33 @@ body {
     margin-bottom: 10px;
 }
 
-.sub-comments {
-    border-radius: 5px;
-    margin-top: 10px;
-    border: 1px solid #eee;
-    padding-top: 15px;
-    margin-bottom: 15px;
+.font-style {
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 15px;
 }
 
-.sub-comments .btn {
+.heading {
+    color: #2aabd2;
+}
+
+.jumbotron {
+    margin: 50px;
+}
+
+.line-style {
     margin: 10px 0;
+}
+
+.main {
+    margin: 30px;
+    background-color: white;
+}
+
+.media-object {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 15px;
 }
 
 .menu {
@@ -92,11 +74,33 @@ body {
     color: #499ef3;
 }
 
-.line-style {
-    margin: 10px 0;
-}
-
 .media {
     margin-top: 30px;
     margin-bottom: 12px;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.profile .section {
+    margin-top: 20px;
+}
+
+.sub-comments {
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #eee;
+    padding-top: 15px;
+    margin-bottom: 15px;
+}
+
+.sub-comments .btn {
+    margin: 10px 0;
+}
+
+.text-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
 }

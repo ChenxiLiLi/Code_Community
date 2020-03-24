@@ -46,7 +46,7 @@ public class QuestionServiceImpl implements QuestionService {
             offset = paginationDTO.getPagination(totalCount, page, pageSize);
             questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, pageSize));
         } else {
-            //!!!查询当前用户发布的问题
+            //查询当前用户发布的问题
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
                     .andCreatorEqualTo(accountId);

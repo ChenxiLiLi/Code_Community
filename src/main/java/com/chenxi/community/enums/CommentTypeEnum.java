@@ -8,7 +8,7 @@ package com.chenxi.community.enums;
 public enum CommentTypeEnum {
     /**
      * 1表示对楼主的问题进行评论
-     * 2表示对层主的评论进行回复
+     * 2表示对层主的评论进行回复，即二级评论
      */
     QUESTION(1),
     COMMENT(2);
