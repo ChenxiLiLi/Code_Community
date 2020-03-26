@@ -1,9 +1,12 @@
 package com.chenxi.community.controller;
 
+import com.chenxi.community.cache.TagCache;
 import com.chenxi.community.dto.QuestionDTO;
+import com.chenxi.community.dto.TagDTO;
 import com.chenxi.community.model.Question;
 import com.chenxi.community.model.User;
 import com.chenxi.community.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: Mr.Chen
@@ -26,56 +31,65 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model) {
+        model.addAttribute("selectTags" , TagCache.getAllTags());
         return "publish";
     }
 
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Long id,
-                       Model model){
+                       Model model) {
         QuestionDTO questionDTO = questionService.getQuestionById(id);
-        model.addAttribute("title",questionDTO.getTitle());
-        model.addAttribute("description",questionDTO.getDescription());
-        model.addAttribute("tag",questionDTO.getTag());
-        model.addAttribute("id", id);
+        model.addAttribute("title" , questionDTO.getTitle());
+        model.addAttribute("description" , questionDTO.getDescription());
+        model.addAttribute("tag" , questionDTO.getTag());
+        model.addAttribute("id" , id);
+        model.addAttribute("selectTags" , TagCache.getAllTags());
         return "publish";
     }
 
     @PostMapping("/publish")
     public String doPublish(
-            @RequestParam(value="title",required = false) String title,
-            @RequestParam(value = "description",required = false) String description,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "id", required = false) Long id,
+            @RequestParam(value = "title" , required = false) String title,
+            @RequestParam(value = "description" , required = false) String description,
+            @RequestParam(value = "tag" , required = false) String tag,
+            @RequestParam(value = "id" , required = false) Long id,
             HttpServletRequest request,
-            Model model){
+            Model model) {
         //添加进model，用来前端展示
-        model.addAttribute("title",title);
-        model.addAttribute("description",description);
-        model.addAttribute("tag",tag);
+        model.addAttribute("title" , title);
+        model.addAttribute("description" , description);
+        model.addAttribute("tag" , tag);
+        model.addAttribute("selectTags" , TagCache.getAllTags());
 
         //判断用户的登录态，未登录不能发布问题
-        if(request.getSession().getAttribute("user") == null){
-            model.addAttribute("error", "用户未登录");
+        if (request.getSession().getAttribute("user") == null) {
+            model.addAttribute("error" , "用户未登录");
             return "publish";
         }
         //判断输入框的情况
-        if(title == null || "".equals(title)){
-            model.addAttribute("error", "标题不能为空");
+        if (title == null || "".equals(title)) {
+            model.addAttribute("error" , "标题不能为空");
             return "publish";
         }
-        if(description == null || "".equals(description)){
-            model.addAttribute("error", "问题描述不能为空");
+        if (description == null || "".equals(description)) {
+            model.addAttribute("error" , "问题描述不能为空");
             return "publish";
         }
-        if(tag == null || "".equals(tag)){
-            model.addAttribute("error", "标签不能为空");
+        if (tag == null || "".equals(tag)) {
+            model.addAttribute("error" , "标签不能为空");
+            return "publish";
+        }
+        //判断输入的标签是否合法
+        String invalid = TagCache.filterInvalid(tag);
+        if (StringUtils.isNotBlank(invalid)) {
+            model.addAttribute("error", "输入了非法标签：" + invalid);
             return "publish";
         }
 
         //获取Question对象，判断是否存进数据库
         //获取当前用户对象，question.creator = user.accountId
-        User user = (User)request.getSession().getAttribute("user");
+        User user = (User) request.getSession().getAttribute("user");
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);

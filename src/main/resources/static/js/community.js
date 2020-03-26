@@ -10,7 +10,7 @@ function post() {
 /**
  * 问题板块的子评论
  */
-function subComment(e){
+function subComment(e) {
     var commentId = e.getAttribute("data-id");
     var content = $("#input-" + commentId).val();
     comment(commentId, 2, content);
@@ -19,7 +19,7 @@ function subComment(e){
 /**
  * 评论板块封装方法
  */
-function comment(targetId, type, content){
+function comment(targetId, type, content) {
     //前端也需要做校验，提高反应速度
     if (!content) {
         alert("评论内容不能为空~~");
@@ -65,7 +65,7 @@ function collapseComments(e) {
     subComments.toggleClass("in");
     icon.toggleClass("active");
     //点击之后绘制页面
-    if(icon.hasClass("active") && subComments.children().length === 1){
+    if (icon.hasClass("active") && subComments.children().length === 1) {
         $.getJSON("/comment/" + id, function (data) {
             $.each(data.data.reverse(), function (index, comment) {
                 var mediaLeftElement = $("<div/>", {
@@ -90,7 +90,7 @@ function collapseComments(e) {
                 })));
 
                 var mediaLine = $("<hr/>", {
-                   "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                    "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12"
                 });
 
                 var mediaElement = $("<div/>", {
@@ -104,5 +104,31 @@ function collapseComments(e) {
                 subComments.prepend(commentElement);
             });
         });
+    }
+}
+
+/**
+ * 展示所有标签
+ */
+function showTags() {
+    $("#all-tags").show();
+}
+
+/**
+ * 选中标签并添加进input
+ */
+function selectdTag(e) {
+    //获取当前的input的值
+    var value = e.getAttribute("data-tag");
+    var previous = $("#tag").val();
+    if (!previous) {
+        //input为空
+        $("#tag").val(value);
+    } else {
+        //input不为空
+        var str = previous.split(",");
+        if (str.indexOf(value) === -1) {
+            $("#tag").val(previous + ',' + value);
+        }
     }
 }
