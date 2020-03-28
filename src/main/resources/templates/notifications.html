@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-Hans-CN">
+<head>
+    <title>码农社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery.min.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+</head>
+<!-- 通知页 -->
+<body>
+<div th:replace="navigation :: myfooter"></div>
+<div class="container-fluid main">
+    <div class="row">
+        <!-- 选择板块 -->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="background-color: black;height: 5px">
+            <div class="list-group section">
+                <a href="/notifications/action/index"
+                   th:class="${section == 'index'} ? 'active list-group-item' : 'list-group-item'">评论
+                    <span class="badge" th:text="${unRead}"></span>
+                </a>
+                <a href="/notifications/action/reply"
+                   th:class="${section == 'reply'} ? 'active list-group-item' : 'list-group-item'">回复
+                    <span class="badge" th:text="${unRead}"></span>
+                </a>
+                <a href="/notifications/action/like"
+                   th:class="${section == 'like'} ? 'active list-group-item' : 'list-group-item'">点赞
+                    <span class="badge" th:text="${unRead}"></span>
+                </a>
+            </div>
+        </div>
+        <!-- 详细展示 -->
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <!-- 评论板块 -->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section == 'index'}">
+                评论板块
+            </div>
+            <!-- 回复板块 -->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section == 'reply'}">
+                <div class="media" th:each="notification : ${pagination.data}">
+                    <div class="media-body">
+                        <p class="media-heading">
+                            <span th:text="${notification.notifierName +' ' + notification.typeName + ' '}"></span>
+                            <a th:href="@{'/notifications/detail/'+ ${notification.outerid}}"
+                               th:text="${notification.outerTitle}">
+                            </a>
+                            <span class="label label-danger" th:if="${notification.status == 0}">未读</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- 点赞板块 -->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section == 'like'}">
+                点赞板块
+            </div>
+            <!-- 处理分页 -->
+            <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pull-right">
+                        <li th:if="${pagination2.showFirstPage}">
+                            <a th:href="@{./{section}(page=${1}, section=${section})}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;&lt;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pagination2.showPrevious}">
+                            <a th:href="@{./{section}(page=${pagination2.page - 1}, section=${section})}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;</span>
+                            </a>
+                        </li>
+                        <li th:each="page : ${pagination2.pages}" th:class="${pagination2.page == page} ? 'active' : ''">
+                            <a th:href="@{./{section}(page=${page}, section=${section})}" th:text="${page}"></a>
+                        </li>
+                        <li th:if="${pagination2.showNext}">
+                            <a th:href="@{./{section}(page=${pagination2.page + 1}, section=${section})}" aria-label="Next">
+                                <span aria-hidden="true">&gt;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pagination2.showEndPage}">
+                            <a th:href="@{/(page=${pagination2.totalPage})}" aria-label="Next">
+                                <span aria-hidden="true">&gt;&gt;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>-->
+        </div>
+    </div>
+</div>
+</body>
+</html>

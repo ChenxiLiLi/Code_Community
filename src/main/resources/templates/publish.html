@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-Hans-CN">
 <head>
     <title>码农社区</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -11,7 +11,7 @@
     <script src="/js/community.js" type="application/javascript"></script>
 </head>
 <body>
-
+<!-- 问题发起页 -->
 <!-- 导航条 -->
 <div th:replace="navigation :: myfooter"></div>
 <div class="container-fluid main" th:if="${session.user != null}">
@@ -71,10 +71,10 @@
         </div>
         <!-- 说明区 -->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="background-color: black;height: 5px">
-            <h3>问题发起指南</h3>
-            • 问题标题: 请用精简的语言描述您发布的问题，不超过25字<br>
-            • 问题描述: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料<br>
-            • 选择标签: 选择一个或者多个合适的标签<br>
+            <h3>问题发起指南</h3><br>
+            <p><b>• 问题标题: </b>请用精简的语言描述您发布的问题，不超过25字</p><br>
+            <p><b>• 问题描述: </b>详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料</p><br>
+            <p><b>• 选择标签: </b>选择一个或者多个合适的标签</p><br>
         </div>
     </div>
 </div>

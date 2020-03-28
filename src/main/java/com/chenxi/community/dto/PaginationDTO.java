@@ -11,7 +11,7 @@ import java.util.List;
  * @Date:Created in 18:38 2020/3/10
  */
 @Data
-public class PaginationDTO {
+public class PaginationDTO<T> {
     /**
      * 是否展示首页
     */
@@ -36,7 +36,7 @@ public class PaginationDTO {
      * 页码
      */
     private Integer page;
-    private List<QuestionDTO> questions;
+    private List<T> data;
     private List<Integer> pages;
 
     /**

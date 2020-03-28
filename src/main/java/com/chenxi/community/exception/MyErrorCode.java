@@ -20,7 +20,9 @@ public enum MyErrorCode implements IMyErrorCode {
     SYS_ERROR(2004, "服务器跑去度假了，请稍后再进行尝试"),
     TYPE_PARAM_WRONG(2005, "评论类型不存在"),
     COMMENT_NOT_FOUND(2006, "回复的评论不存在"),
-    CONTENT_IS_EMPTY(2007, "评论内容不能为空");
+    CONTENT_IS_EMPTY(2007, "评论内容不能为空"),
+    READ_NOTIFICATION_FAIL(2008, "这通知是别人的吧?"),
+    NOTIFICATION_NOT_FOUND(2009, "找不到相应的通知");
 
     private String message;
     private Integer code;

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-Hans-CN">
 <head>
     <title>码农社区</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -19,13 +19,22 @@
     }
 </script>
 <body>
+<!-- 首页 -->
 <div th:replace="navigation :: myfooter"></div>
 <div class="container-fluid main">
     <div class="row">
+        <!-- 站长座右铭 -->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="background-color: black;height: 5px">
+            <h3>谦谦君子，温文如玉</h3>
+            <a href="#">
+                <img class="img-style img-thumbnail" src="img/favor.png" alt="Style">
+            </a>
+        </div>
+        <!-- 正文 -->
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span class="glyphicon glyphicon-eye-open" aria-hidden="true"> 发现</span></h3>
             <hr/>
-            <div class="media" th:each="question : ${pagination1.questions}">
+            <div class="media" th:each="question : ${pagination1.data}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded" th:src="${question.user.avatarUrl}" alt="用户头像"/>
@@ -71,12 +80,6 @@
                     </li>
                 </ul>
             </nav>
-        </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="background-color: black;height: 5px">
-            <h3>谦谦君子，温文如玉</h3>
-            <a href="#">
-                <img class="img-style img-thumbnail" src="img/favor.png" alt="Style">
-            </a>
         </div>
     </div>
 </div>

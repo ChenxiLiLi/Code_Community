@@ -3,6 +3,7 @@ package com.chenxi.community.service;
 import com.chenxi.community.dto.CommentDTO;
 import com.chenxi.community.enums.CommentTypeEnum;
 import com.chenxi.community.model.Comment;
+import com.chenxi.community.model.User;
 
 import java.util.List;
 
@@ -15,8 +16,9 @@ public interface CommentService {
     /**
      * 插入一条评论记录
      * @param comment 评论对象
+     * @param commentator 当前用户对象
      */
-    void insert(Comment comment);
+    void insert(Comment comment, User commentator);
 
     /**
      * 返回评论列表集合

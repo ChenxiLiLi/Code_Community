@@ -108,7 +108,7 @@ body {
     float: right !important;
 }
 
-.profile .section {
+.section {
     margin-top: 20px;
 }
 
@@ -124,6 +124,14 @@ body {
     margin-left: 18px;
     display: inline-block;
     padding: 9px;
+}
+
+.point {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: red;
+    border-radius: 100%;
 }
 
 .question-tag {

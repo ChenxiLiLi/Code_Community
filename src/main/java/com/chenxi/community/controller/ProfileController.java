@@ -35,14 +35,16 @@ public class ProfileController {
             return "redirect:/";
         }
         if ("questions".equals(action)) {
+            //展示个人问题（需要封装问题对象）
+            PaginationDTO paginationDTO = questionService.getPaginationDTOList(user.getAccountId(), page, pageSize);
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName","我的提问");
-        }else if("replies".equals(action)){
-            model.addAttribute("section", "replies");
-            model.addAttribute("sectionName","最新回复");
+            model.addAttribute("pagination2", paginationDTO);
+        }else if("personInfo".equals(action)){
+            //展示个人资料
+            model.addAttribute("section", "personInfo");
+            model.addAttribute("sectionName","个人资料");
         }
-        PaginationDTO paginationDTO = questionService.getPaginationDTOList(user.getAccountId(), page, pageSize);
-        model.addAttribute("pagination2", paginationDTO);
         return "profile";
     }
 }

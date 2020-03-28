@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-Hans-CN">
 <body>
+<!-- 导航条 -->
 <div th:fragment="myfooter">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -10,7 +11,6 @@
                 </button>
                 <a class="navbar-brand" href="/">码农社区</a>
             </div>
-
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
@@ -19,6 +19,13 @@
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown" th:if="${session.user != null}">
+                        <a href="/notifications/action/index">
+                            <!-- 存在未读通知 -->
+                            <span class="point"></span>
+                            <span class="glyphicon glyphicon-bell">通知</span>
+                        </a>
+                    </li>
                     <li th:if="${session.user != null}">
                         <a href="/publish">提问</a>
                     </li>
@@ -29,7 +36,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/profile/questions">个人中心</a></li>
+                            <li><a href="/profile/personInfo">个人中心</a></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>

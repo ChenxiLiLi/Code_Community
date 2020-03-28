@@ -40,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public PaginationDTO getPaginationDTOList(String accountId, Integer page, Integer pageSize) {
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         int totalCount;             //问题条数
         Integer offset;             //limit查询限制条件
         List<Question> questions;   //Question集合
@@ -66,7 +66,7 @@ public class QuestionServiceImpl implements QuestionService {
             QuestionDTO questionDTO = new QuestionDTO();
             questionDTOList.add(creatorWithAccountId(question, questionDTO));
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
     }
 

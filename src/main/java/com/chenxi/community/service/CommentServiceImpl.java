@@ -2,6 +2,8 @@ package com.chenxi.community.service;
 
 import com.chenxi.community.dto.CommentDTO;
 import com.chenxi.community.enums.CommentTypeEnum;
+import com.chenxi.community.enums.NotificationsStatusEnum;
+import com.chenxi.community.enums.NotificationsTypeEnum;
 import com.chenxi.community.exception.MyErrorCode;
 import com.chenxi.community.exception.MyException;
 import com.chenxi.community.mapper.*;
@@ -35,10 +37,12 @@ public class CommentServiceImpl implements CommentService {
     private UserMapper userMapper;
     @Autowired
     private CommentExtMapper commentExtMapper;
+    @Autowired
+    private NotificationsMapper notificationsMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insert(Comment comment) {
+    public void insert(Comment comment, User commentator) {
         //插入评论记录之前需要判断parentId是否存在，即当前问题是否存在，可能在评论之前被删除了
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new MyException(MyErrorCode.TARGET_PARAM_NOT_FOUND);
@@ -55,11 +59,18 @@ public class CommentServiceImpl implements CommentService {
             if (dbComment == null) {
                 throw new MyException(MyErrorCode.COMMENT_NOT_FOUND);
             }
+            //查询当前问题对象
+            Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
+            if (question == null) {
+                throw new MyException(MyErrorCode.QUESTION_NOT_FOUND);
+            }
             //2、存在则插入一条评论记录
             commentMapper.insert(comment);
             //3、更新子评论数
             dbComment.setCommentCount(1);
             commentExtMapper.incCommentCount(dbComment);
+            //4、更新一条评论类型的通知
+            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationsTypeEnum.REPLY_COMMENT, question.getId());
         } else {
             //评论问题
             //1、判断当前停留页面的问题是否存在
@@ -71,7 +82,31 @@ public class CommentServiceImpl implements CommentService {
             commentMapper.insert(comment);
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
+            //3、更新一条回复类型的通知
+            createNotify(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationsTypeEnum.REPLY_QUESTION, question.getId());
         }
+    }
+
+    /**
+     * 创建通知
+     * @param comment 当前的评论或回复对象
+     * @param receiver 接收通知的对象
+     * @param notifyName 操作人用户名
+     * @param outerTitle 问题标题
+     * @param notificationsTypeEnum 通知类型
+     * @param outerid 所属问题的id 用来进行跳转
+     */
+    private void createNotify(Comment comment, String receiver, String notifyName, String outerTitle, NotificationsTypeEnum notificationsTypeEnum, Long outerid) {
+        Notifications notifications = new Notifications();
+        notifications.setNotifier(comment.getCommentator());
+        notifications.setNotifierName(notifyName);
+        notifications.setOuterid(outerid);
+        notifications.setReceiver(receiver);
+        notifications.setOuterTitle(outerTitle);
+        notifications.setType(notificationsTypeEnum.getType());
+        notifications.setStatus(NotificationsStatusEnum.UNREAD.getStatus());
+        notifications.setGmtCreate(System.currentTimeMillis());
+        notificationsMapper.insert(notifications);
     }
 
     @Override
