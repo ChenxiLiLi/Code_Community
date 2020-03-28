@@ -39,7 +39,7 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionExtMapper questionExtMapper;
 
     @Override
-    public PaginationDTO getPaginationDTOList(String accountId, Integer page, Integer pageSize) {
+    public PaginationDTO<QuestionDTO> getPaginationDTOList(String accountId, Integer page, Integer pageSize) {
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         int totalCount;             //问题条数
         Integer offset;             //limit查询限制条件

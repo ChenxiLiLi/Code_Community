@@ -19,7 +19,7 @@ public interface QuestionService {
      * @param pageSize 总页数
      * @return 页面元素的集合
      */
-    PaginationDTO getPaginationDTOList(String accountId, Integer page, Integer pageSize);
+    PaginationDTO<QuestionDTO> getPaginationDTOList(String accountId, Integer page, Integer pageSize);
 
     /**
      * 通过Question的ID来查询Question对象

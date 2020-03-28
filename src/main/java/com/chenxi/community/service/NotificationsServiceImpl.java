@@ -32,7 +32,7 @@ public class NotificationsServiceImpl implements NotificationsService {
     private NotificationsMapper notificationsMapper;
 
     @Override
-    public PaginationDTO getPaginationDTO(String accountId, Integer page, Integer pageSize) {
+    public PaginationDTO<NotificationsDTO> getPaginationDTO(String accountId, Integer page, Integer pageSize, NotificationsTypeEnum notificationsTypeEnum) {
 
         PaginationDTO<NotificationsDTO> paginationDTO = new PaginationDTO<>();
         int totalCount;
@@ -40,8 +40,10 @@ public class NotificationsServiceImpl implements NotificationsService {
         List<Notifications> notifications;
         //查找相关通知
         NotificationsExample notificationsExample = new NotificationsExample();
+        notificationsExample.setOrderByClause("gmt_create desc");
         notificationsExample.createCriteria()
-                .andReceiverEqualTo(accountId).andStatusEqualTo(NotificationsStatusEnum.UNREAD.getStatus());
+                .andReceiverEqualTo(accountId)
+                .andTypeEqualTo(notificationsTypeEnum.getType());
         totalCount = (int) notificationsMapper.countByExample(notificationsExample);
         offset = paginationDTO.getPagination(totalCount, page, pageSize);
         notifications = notificationsMapper.selectByExampleWithRowbounds(notificationsExample, new RowBounds(offset, pageSize));
@@ -62,8 +64,8 @@ public class NotificationsServiceImpl implements NotificationsService {
 
     @Override
     public NotificationsDTO read(Long id, User user) {
+        //查找出该问题下的所有未读通知
         NotificationsExample notificationsExample = new NotificationsExample();
-        notificationsExample.setDistinct(true);
         notificationsExample.createCriteria()
                 .andOuteridEqualTo(id).andStatusEqualTo(NotificationsStatusEnum.UNREAD.getStatus());
         List<Notifications> notifications = notificationsMapper.selectByExample(notificationsExample);
@@ -71,16 +73,19 @@ public class NotificationsServiceImpl implements NotificationsService {
             //找不到相应的通知
             throw new MyException(MyErrorCode.NOTIFICATION_NOT_FOUND);
         }
-        //由于去重了，所以size==1
+        //如果点击时的接收人不是你自己则报错
         Notifications notification = notifications.get(0);
         if (!Objects.equals(notification.getReceiver(), user.getAccountId())) {
             //防止手动输入url访问
             throw new MyException(MyErrorCode.READ_NOTIFICATION_FAIL);
         }
 
-        //通知读取成功，更新通知状态
-        notification.setStatus(NotificationsStatusEnum.READ.getStatus());
-        notificationsMapper.updateByPrimaryKey(notification);
+        //通知读取成功，更新所有查询出来的通知的状态
+        for (Notifications n : notifications) {
+            n.setStatus(NotificationsStatusEnum.READ.getStatus());
+            notificationsMapper.updateByPrimaryKey(n);
+        }
+        //将其中一个通知返回出去，用于获取相应的questionId
         NotificationsDTO notificationsDTO = new NotificationsDTO();
         BeanUtils.copyProperties(notification, notificationsDTO);
         notificationsDTO.setTypeName(NotificationsTypeEnum.nameOfType(notification.getType()));
@@ -88,10 +93,11 @@ public class NotificationsServiceImpl implements NotificationsService {
     }
 
     @Override
-    public Long unreadCount(String accountId) {
+    public Long unreadCount(String accountId, NotificationsTypeEnum notificationsTypeEnum) {
         NotificationsExample example = new NotificationsExample();
         example.createCriteria()
                 .andReceiverEqualTo(accountId)
+                .andTypeEqualTo(notificationsTypeEnum.getType())
                 .andStatusEqualTo(NotificationsStatusEnum.UNREAD.getStatus());
         return notificationsMapper.countByExample(example);
     }

@@ -3,6 +3,7 @@ package com.chenxi.community.Interceptor;
 import com.chenxi.community.mapper.UserMapper;
 import com.chenxi.community.model.User;
 import com.chenxi.community.model.UserExample;
+import com.chenxi.community.service.NotificationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,17 +20,19 @@ import java.util.List;
  * @Date:Created in 16:47 2020/3/11
  */
 @Service
-public class SessionInterceptor implements  HandlerInterceptor {
+public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationsService notificationsService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //通过请求对象获取cookie
         Cookie[] cookies = request.getCookies();
         //对cookie判空
-        if(cookies != null && cookies.length != 0){
+        if (cookies != null && cookies.length != 0) {
             //查找自定义的cookie-别名token
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
@@ -38,6 +41,7 @@ public class SessionInterceptor implements  HandlerInterceptor {
                     UserExample example = new UserExample();
                     example.createCriteria()
                             .andTokenEqualTo(token);
+                    //查询用户
                     List<User> users = userMapper.selectByExample(example);
                     if (users.size() != 0) {
                         request.getSession().setAttribute("user", users.get(0));

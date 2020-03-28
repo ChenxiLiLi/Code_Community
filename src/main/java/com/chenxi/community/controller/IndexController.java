@@ -1,6 +1,8 @@
 package com.chenxi.community.controller;
 
 import com.chenxi.community.dto.PaginationDTO;
+import com.chenxi.community.dto.QuestionDTO;
+import com.chenxi.community.service.NotificationsService;
 import com.chenxi.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +26,7 @@ public class IndexController {
                         @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
                         Model model) {
         //展示首页问题列表
-        PaginationDTO paginationDTO = questionService.getPaginationDTOList("0", page, pageSize);
+        PaginationDTO<QuestionDTO> paginationDTO = questionService.getPaginationDTOList("0", page, pageSize);
         model.addAttribute("pagination1", paginationDTO);
         return "index";
     }

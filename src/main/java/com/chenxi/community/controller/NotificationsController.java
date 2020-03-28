@@ -39,25 +39,32 @@ public class NotificationsController {
         if (user == null) {
             return "redirect:/";
         }
+        //用来返回展示信息的对象
+        PaginationDTO<NotificationsDTO> paginationDTO = null;
         if ("index".equals(action)) {
             //展示评论相关信息
+            paginationDTO = notificationsService.getPaginationDTO(user.getAccountId(), page, pageSize, NotificationsTypeEnum.REPLY_COMMENT);
             model.addAttribute("section", "index");
             model.addAttribute("sectionName", "评论");
         } else if ("reply".equals(action)) {
             //展示回复相关信息
             //用户已经登录，通过accountId查询出用户的所有的回复
-            PaginationDTO paginationDTO = notificationsService.getPaginationDTO(user.getAccountId(), page, pageSize);
+            paginationDTO = notificationsService.getPaginationDTO(user.getAccountId(), page, pageSize, NotificationsTypeEnum.REPLY_QUESTION);
             model.addAttribute("section", "reply");
             model.addAttribute("sectionName", "回复");
-            model.addAttribute("pagination", paginationDTO);
-
         } else if ("like".equals(action)) {
             //展示点赞相关信息
+            paginationDTO = notificationsService.getPaginationDTO(user.getAccountId(), page, pageSize, NotificationsTypeEnum.LIKE_COMMENT);
             model.addAttribute("section", "like");
             model.addAttribute("sectionName", "点赞");
         }
-        Long unReadCount = notificationsService.unreadCount(user.getAccountId());
-        model.addAttribute("unRead", unReadCount);
+        Long unReadComment = notificationsService.unreadCount(user.getAccountId(), NotificationsTypeEnum.REPLY_COMMENT);
+        Long unReadReply = notificationsService.unreadCount(user.getAccountId(), NotificationsTypeEnum.REPLY_QUESTION);
+        Long unReadLike = notificationsService.unreadCount(user.getAccountId(), NotificationsTypeEnum.LIKE_COMMENT);
+        model.addAttribute("unReadComment", unReadComment);
+        model.addAttribute("unReadReply", unReadReply);
+        model.addAttribute("unReadLike", unReadLike);
+        model.addAttribute("pagination", paginationDTO);
         return "notifications";
     }
 
@@ -73,7 +80,8 @@ public class NotificationsController {
         NotificationsDTO notificationsDTO = notificationsService.read(id, user);
         //跳转到相应的question页面
         if (NotificationsTypeEnum.REPLY_COMMENT.getType().equals(notificationsDTO.getType())
-            || NotificationsTypeEnum.REPLY_QUESTION.getType().equals(notificationsDTO.getType())) {
+            || NotificationsTypeEnum.REPLY_QUESTION.getType().equals(notificationsDTO.getType())
+            || NotificationsTypeEnum.LIKE_COMMENT.getType().equals(notificationsDTO.getType())) {
             return "redirect:/question/" + notificationsDTO.getOuterid();
         } else {
             return "redirect:/";
