@@ -12,7 +12,7 @@ import com.chenxi.community.model.User;
  */
 public interface NotificationsService {
     /**
-     * 对通知做分页操作
+     * 根据通知类型对通知做分页操作
      * @param accountId 用户唯一标识
      * @param page      页码
      * @param pageSize  页的总数
@@ -30,7 +30,7 @@ public interface NotificationsService {
     NotificationsDTO read(Long id, User user);
 
     /**
-     * 查找未读的通知数
+     * 根据通知类型查找未读的通知数
      * @param accountId 用户的标识
      * @param notificationsTypeEnum 通知类型
      * @return 通知数

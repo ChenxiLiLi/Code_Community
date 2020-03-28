@@ -1,5 +1,6 @@
 package com.chenxi.community.Interceptor;
 
+import com.chenxi.community.enums.NotificationsTypeEnum;
 import com.chenxi.community.mapper.UserMapper;
 import com.chenxi.community.model.User;
 import com.chenxi.community.model.UserExample;
@@ -45,6 +46,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                     List<User> users = userMapper.selectByExample(example);
                     if (users.size() != 0) {
                         request.getSession().setAttribute("user", users.get(0));
+                        //查询是否存在通知
+                        Long hasNotify = notificationsService.unreadCount(users.get(0).getAccountId(), NotificationsTypeEnum.All_NOTIFY);
+                        request.getSession().setAttribute("hasNotify", hasNotify);
                     }
                     break;
                 }

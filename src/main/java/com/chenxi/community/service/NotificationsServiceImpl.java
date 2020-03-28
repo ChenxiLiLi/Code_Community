@@ -48,6 +48,7 @@ public class NotificationsServiceImpl implements NotificationsService {
         offset = paginationDTO.getPagination(totalCount, page, pageSize);
         notifications = notificationsMapper.selectByExampleWithRowbounds(notificationsExample, new RowBounds(offset, pageSize));
 
+        //将通知封装成paginationDTO
         List<NotificationsDTO> notificationsDTOS = new ArrayList<>();
         if (notifications.size() == 0) {
             return paginationDTO;
@@ -95,10 +96,18 @@ public class NotificationsServiceImpl implements NotificationsService {
     @Override
     public Long unreadCount(String accountId, NotificationsTypeEnum notificationsTypeEnum) {
         NotificationsExample example = new NotificationsExample();
-        example.createCriteria()
+        if (notificationsTypeEnum.getType() == 0) {
+            //查找所有未读通知
+            example.createCriteria()
+                .andReceiverEqualTo(accountId)
+                .andStatusEqualTo(NotificationsStatusEnum.UNREAD.getStatus());
+        } else {
+            //根据类型查找相应的未读通知
+            example.createCriteria()
                 .andReceiverEqualTo(accountId)
                 .andTypeEqualTo(notificationsTypeEnum.getType())
                 .andStatusEqualTo(NotificationsStatusEnum.UNREAD.getStatus());
+        }
         return notificationsMapper.countByExample(example);
     }
 }

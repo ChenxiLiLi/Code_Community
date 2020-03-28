@@ -22,7 +22,7 @@
                     <li class="dropdown" th:if="${session.user != null}">
                         <a href="/notifications/action/index">
                             <!-- 存在未读通知 -->
-                            <span class="point"></span>
+                            <span class="point" th:if="${session.hasNotify != 0}"></span>
                             <span class="glyphicon glyphicon-bell">通知</span>
                         </a>
                     </li>
