@@ -21,6 +21,9 @@ import java.io.InputStream;
 @Service
 public class AliyunOssProvider {
 
+    /**
+     *  通过配置文件注入相应的值
+     */
     @Value("${aliyun.oss.access-key-id}")
     private String accessKeyId;
     @Value("${aliyun.oss.access-key-secret}")
@@ -34,18 +37,26 @@ public class AliyunOssProvider {
 
     OSS client = null;
 
+    /**
+     * 上传文件
+     * @param multipartFile 接收上传文件的接口
+     * @param remotePath bucket下的子目录名
+     * @return 文件的路径
+     * @throws IOException 抛出异常
+     */
     public String uploadFile(MultipartFile multipartFile, String remotePath) throws IOException {
         //将multipartFile转换成相应的IO流
         InputStream fileContent = multipartFile.getInputStream();
         //获取文件名
         String fileName = multipartFile.getOriginalFilename();
         System.out.println(fileName);
-        //修改文件名
+        //修改文件名，保证文件名不重复
         fileName = "tcx_" + System.currentTimeMillis() + fileName.substring(fileName.lastIndexOf("."));
-        //初始化OSSClient
-        client = new OSSClientBuilder().build(endPoint, accessKeyId, accessKeySecret);
         //定义二级目录
         String remoteFilePath = remotePath.replaceAll("\\\\", "/") + "/";
+        //初始化OSSClient
+        client = new OSSClientBuilder().build(endPoint, accessKeyId, accessKeySecret);
+        //获取OSS对象的元数据
         ObjectMetadata objectMetadata = new ObjectMetadata();
         //设置必要的属性
         objectMetadata.setContentLength(fileContent.available());
@@ -57,8 +68,10 @@ public class AliyunOssProvider {
         //上传文件
         System.out.print(remoteFilePath);
         client.putObject(bucketName, remoteFilePath+fileName , fileContent, objectMetadata);
+        //关闭相应的流
         client.shutdown();
         fileContent.close();
+        //返回文件路径
         return accessUrl + "/" + remoteFilePath + fileName;
     }
 
