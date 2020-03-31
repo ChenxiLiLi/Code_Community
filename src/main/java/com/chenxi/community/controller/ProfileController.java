@@ -1,6 +1,7 @@
 package com.chenxi.community.controller;
 
 import com.chenxi.community.dto.PaginationDTO;
+import com.chenxi.community.dto.QuestionDTO;
 import com.chenxi.community.model.User;
 import com.chenxi.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ProfileController {
         }
         if ("questions".equals(action)) {
             //展示个人问题（需要封装问题对象）
-            PaginationDTO paginationDTO = questionService.getPaginationDTOList(user.getAccountId(), page, pageSize);
+            PaginationDTO<QuestionDTO> paginationDTO = questionService.getPaginationDTOList(user.getAccountId(), page, pageSize);
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName","我的提问");
             model.addAttribute("pagination2", paginationDTO);
