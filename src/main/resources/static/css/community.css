@@ -52,6 +52,12 @@ body {
     margin-top: 15px;
 }
 
+.footer {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #666;
+}
+
 .heading {
     color: #2aabd2;
 }
@@ -78,6 +84,7 @@ body {
     width: 40px;
     height: 40px;
     margin-bottom: 15px;
+    margin-left: 20px;
 }
 
 .menu {

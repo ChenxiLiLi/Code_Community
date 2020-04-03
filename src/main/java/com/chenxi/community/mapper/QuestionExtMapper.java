@@ -1,5 +1,6 @@
 package com.chenxi.community.mapper;
 
+import com.chenxi.community.dto.QuestionQueryDTO;
 import com.chenxi.community.model.Question;
 import com.chenxi.community.model.QuestionExample;
 import org.apache.ibatis.annotations.Param;
@@ -30,4 +31,8 @@ public interface QuestionExtMapper {
      * @return 与当前问题包含的Tag相关联的问题的集合
      */
     List<Question> selectRelatedQuestion(Question question);
+
+    Integer countBySearch(QuestionQueryDTO questionQueryDTO);
+
+    List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }

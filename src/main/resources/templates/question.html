@@ -17,7 +17,7 @@
 </head>
 <body>
 <!-- 问题详情展示页 -->
-<div th:replace="navigation :: myfooter"></div>
+<div th:replace="navigation :: nav"></div>
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
@@ -108,7 +108,7 @@
             <div class="media col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${session.user != null}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}" alt="用户头像"/>
+                        <img class="media-object img-rounded" th:src="${session.user.avatarUrl}" alt="用户头像"/>
                     </a>
                 </div>
                 <div class="media-body">
@@ -157,5 +157,6 @@
         </div>
     </div>
 </div>
+<div th:replace="footer :: footer"></div>
 </body>
 </html>

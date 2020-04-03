@@ -1,5 +1,6 @@
 package com.chenxi.community.mapper;
 
+import com.chenxi.community.dto.QuestionQueryDTO;
 import com.chenxi.community.model.Question;
 import com.chenxi.community.model.QuestionExample;
 import java.util.List;

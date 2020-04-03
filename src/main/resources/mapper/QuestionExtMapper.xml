@@ -35,4 +35,22 @@
   <select id="selectRelatedQuestion" parameterType="com.chenxi.community.model.Question" resultMap="BaseResultMap">
     select * from QUESTION WHERE id != #{id} and tag regexp #{tag}
   </select>
+
+  <select id="countBySearch" parameterType="com.chenxi.community.dto.QuestionQueryDTO" resultType="java.lang.Integer">
+    select count(*) from QUESTION
+    <where>
+      <if test="search != null">
+        and title regexp #{search}
+      </if>
+    </where>
+  </select> <select id="selectBySearch" parameterType="com.chenxi.community.dto.QuestionQueryDTO" resultMap="BaseResultMap">
+    select * from QUESTION
+    <where>
+      <if test="search != null">
+        and title regexp #{search}
+      </if>
+    </where>
+    order by gmt_create desc limit #{page},#{pageSize}
+  </select>
+
 </mapper>

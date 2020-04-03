@@ -37,7 +37,7 @@ public class ProfileController {
         }
         if ("questions".equals(action)) {
             //展示个人问题（需要封装问题对象）
-            PaginationDTO<QuestionDTO> paginationDTO = questionService.getPaginationDTOList(user.getAccountId(), page, pageSize);
+            PaginationDTO<QuestionDTO> paginationDTO = questionService.getPaginationDTOList(user.getAccountId(), page, pageSize, true);
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName","我的提问");
             model.addAttribute("pagination2", paginationDTO);

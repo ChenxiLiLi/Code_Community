@@ -2,6 +2,7 @@ package com.chenxi.community.service;
 
 import com.chenxi.community.dto.PaginationDTO;
 import com.chenxi.community.dto.QuestionDTO;
+import com.chenxi.community.dto.QuestionQueryDTO;
 import com.chenxi.community.exception.MyErrorCode;
 import com.chenxi.community.exception.MyException;
 import com.chenxi.community.mapper.QuestionExtMapper;
@@ -39,27 +40,37 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionExtMapper questionExtMapper;
 
     @Override
-    public PaginationDTO<QuestionDTO> getPaginationDTOList(String accountId, Integer page, Integer pageSize) {
+    public PaginationDTO<QuestionDTO> getPaginationDTOList(String search, Integer page, Integer pageSize, Boolean isUser) {
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         int totalCount;             //问题条数
         Integer offset;             //limit查询限制条件
         List<Question> questions;   //Question集合
-        QuestionExample questionExample = new QuestionExample();
-        //设置问题根据创建时间降序排列
-        questionExample.setOrderByClause("gmt_create desc");
-        if ("0".equals(accountId)) {
-            //查询全部问题
-            totalCount = (int) questionMapper.countByExample(new QuestionExample());
-            offset = paginationDTO.getPagination(totalCount, page, pageSize);
-            questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, pageSize));
-        } else {
-            //查询当前用户发布的问题
+
+        if (isUser) {
+            //用户中心, 传进来的search为User的accountId
+            QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
-                    .andCreatorEqualTo(accountId);
+                    .andCreatorEqualTo(search);
             totalCount = (int) questionMapper.countByExample(questionExample);
             offset = paginationDTO.getPagination(totalCount, page, pageSize);
             questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, pageSize));
+        } else {
+            //非用户中心,传进来的search为用户搜索内容,为空时展示所有的问题
+            if (StringUtils.isNotBlank(search)) {
+                //拆分search，应用正则表达式
+                String[] tags = StringUtils.split(search, " ");
+                search = Arrays.stream(tags).collect(Collectors.joining("|"));
+            }
+            //根据search内容匹配查询问题
+            QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+            questionQueryDTO.setSearch(search);
+            totalCount = questionExtMapper.countBySearch(questionQueryDTO);
+            offset = paginationDTO.getPagination(totalCount, page, pageSize);
+            questionQueryDTO.setPage(offset);
+            questionQueryDTO.setPageSize(pageSize);
+            questions = questionExtMapper.selectBySearch(questionQueryDTO);
         }
+
         //QuestionDTO封装Question和User
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
@@ -131,9 +142,9 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questions = questionExtMapper.selectRelatedQuestion(question);
         //将问题转换成QuestionDTO集合返回
         List<QuestionDTO> QuestionDTOs = questions.stream().map(p -> {
-           QuestionDTO questionDTO1 = new QuestionDTO();
-           BeanUtils.copyProperties(p, questionDTO1);
-           return questionDTO1;
+            QuestionDTO questionDTO1 = new QuestionDTO();
+            BeanUtils.copyProperties(p, questionDTO1);
+            return questionDTO1;
         }).collect(Collectors.toList());
         return QuestionDTOs;
     }

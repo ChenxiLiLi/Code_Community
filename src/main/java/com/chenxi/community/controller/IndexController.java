@@ -24,10 +24,12 @@ public class IndexController {
     @GetMapping("/")
     public String index(@RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
+                        @RequestParam(name = "search",  required = false) String search,
                         Model model) {
         //展示首页问题列表
-        PaginationDTO<QuestionDTO> paginationDTO = questionService.getPaginationDTOList("0", page, pageSize);
+        PaginationDTO<QuestionDTO> paginationDTO = questionService.getPaginationDTOList(search, page, pageSize, false);
         model.addAttribute("pagination1", paginationDTO);
+        model.addAttribute("search", search);
         return "index";
     }
 }

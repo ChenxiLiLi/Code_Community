@@ -15,7 +15,7 @@
 <body>
 <!-- 问题发起页 -->
 <!-- 导航条 -->
-<div th:replace="navigation :: myfooter"></div>
+<div th:replace="navigation :: nav"></div>
 <div class="container-fluid main" th:if="${session.user != null}">
     <div class="row">
         <!-- 编辑区 -->
@@ -101,5 +101,6 @@
 <div class="alert alert-warning" role="alert" th:if="${session.user == null}">
     请先登录！！！
 </div>
+<div th:replace="footer :: myfooter"></div>
 </body>
 </html>
