@@ -24,15 +24,11 @@ public class GithubProvider {
                 .url("https://github.com/login/oauth/access_token?client_id=" + accessTokenDTO.getClientId() + "&client_secret=" + accessTokenDTO.getClientSecret() + "&code=" + accessTokenDTO.getCode() + "&redirect_uri=" + accessTokenDTO.getRedirectUri() + "&state=" + accessTokenDTO.getState())
                 .post(body)
                 .build();
-        Response response = null;
-        try {
-            response = client.newCall(request).execute();
+        try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
             return string.split("&")[0].split("=")[1];
         } catch (IOException ignored) {
             return null;
-        } finally {
-            response.close();
         }
     }
 
@@ -42,16 +38,12 @@ public class GithubProvider {
                 .url("https://api.github.com/user")
                 .header("Authorization", "token " + accessToken)
                 .build();
-        Response response = null;
-        try {
-            response = client.newCall(request).execute();
+        try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
             return JSON.parseObject(string, GithubUser.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            response.close();
         }
     }
 }
