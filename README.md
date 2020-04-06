@@ -39,3 +39,26 @@ git commit -m "message"
 git push  
 mvn flyway:migrate  
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate  
+
+### 部署
+#### 依赖
+- git
+- jdk
+- maven
+- mysql
+
+#### 步骤
+- yum update
+- yum install git
+- mkdir App
+- cd App
+- git clone git@github.com:ChenxiLiLi/community.git
+- yum install maven 
+- mvn clean compile package
+- mvn -v
+- java -version
+- cp src/main/resources/application.properties src/main/resources/application-production.properties
+- mvn package重新打包
+-java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar
+- ps -aux | grep java 检查当前进程是否存在
+- 39.107.236.198

@@ -3,10 +3,9 @@ package com.chenxi.community.provider;
 import com.alibaba.fastjson.JSON;
 import com.chenxi.community.dto.AccessTokenDTO;
 import com.chenxi.community.dto.GithubUser;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 /**
  * @Author: Mr.Chen
@@ -14,6 +13,7 @@ import java.io.IOException;
  * @Date:Created in 21:47 2020/3/2
  */
 @Component
+@Slf4j
 public class GithubProvider {
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
@@ -27,9 +27,10 @@ public class GithubProvider {
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
             return string.split("&")[0].split("=")[1];
-        } catch (IOException ignored) {
-            return null;
+        } catch (Exception e) {
+            log.error("getAccessToken error,{}", accessTokenDTO, e);
         }
+        return null;
     }
 
     public GithubUser getUser(String accessToken) {
@@ -38,12 +39,13 @@ public class GithubProvider {
                 .url("https://api.github.com/user")
                 .header("Authorization", "token " + accessToken)
                 .build();
-        try (Response response = client.newCall(request).execute()) {
+        try {
+            Response response = client.newCall(request).execute();
             String string = response.body().string();
             return JSON.parseObject(string, GithubUser.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        } catch (Exception e) {
+            log.error("getUser error,{}", accessToken, e);
         }
+        return null;
     }
 }
