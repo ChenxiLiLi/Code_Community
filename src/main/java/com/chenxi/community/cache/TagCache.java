@@ -41,7 +41,7 @@ public class TagCache {
 
         tool.setCategoryName("工具");
         tool.setTags(Arrays.asList("git " , "github " , "macos " , "visual-studio-code " , "windows " , "vim " , "intellij-idea " , "eclipse " , "typora " , "svn " , "webstorm"));
-        tagDTOS.add(dataBase);
+        tagDTOS.add(tool);
 
         return tagDTOS;
     }
