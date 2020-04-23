@@ -58,7 +58,11 @@ mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 - mvn -v
 - java -version
 - cp src/main/resources/application.properties src/main/resources/application-production.properties
-- mvn package重新打包
--java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar
+- mvn package 重新打包
+- mvn clean compile flyway:migrate 使用flyway创建数据库 
+- mvn clean compile flyway:repair 修复数据库问题 
+- java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar 运行项目
 - ps -aux | grep java 检查当前进程是否存在
-- 39.107.236.198
+- 39.107.236.198 公网IP
+- mvn clean compile flyway:migrate -Pdev 使用本地的profile配置
+

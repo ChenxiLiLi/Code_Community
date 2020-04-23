@@ -44,7 +44,7 @@ function comment(targetId, type, content) {
                     var makeSure = window.confirm(response.message);
                     if (makeSure) {
                         window.open("https://github.com/login/oauth/authorize?client_id=1098b0f922ff4ba70fec" +
-                            "&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
+                            "&redirect_uri=http://www.chen-xi.life/callback&scope=user&state=1");
                     } else {
                         alert(response.message);
                     }
